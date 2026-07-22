@@ -1,0 +1,33 @@
+# Este flujo de trabajo ejecutará pruebas utilizando nodo y luego publicará un paquete en los paquetes de GitHub cuando se cree una versión
+# Para más información ver: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+nombre: Node.js paquete: Paquete node.js
+
+en:
+ liberación   : :
+ tipos : [Creado] : [created]
+
+trabajos:
+ construir    : :
+ Run-On : Ubuntu-Latest : ubuntu-latest
+ pasos Pasos:    steps:
+ - utiliza: acciones/checkout@v4 uses: actions/checkout@v4
+ - utiliza: actions/setup-node@v4 uses: actions/setup-node@v4
+ con : :
+    Versión de nodo   : 20 : 20
+ - Ejecutar: NPM CI run: npm ci
+ - Ejecutar: prueba npm run: npm test
+
+ Publicar-NPM : :
+    Necesidades   :  construir   : build
+ Run-On : Ubuntu-Latest : ubuntu-latest
+     Pasos    : :
+ - utiliza: acciones/checkout@v4 uses: actions/checkout@v4
+ - uses: actions/setup-node@v4
+ con :
+ versión de nodo : 20
+ Registro-URL : https://registry.npmjs.org/
+ - run: npm ci
+ - run: npm publish
+ Env. :
+ Node_auth_token : ${{secrets.npm_token}}
